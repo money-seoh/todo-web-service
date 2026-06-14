@@ -47,7 +47,7 @@ public class ToDoControllerIntegrationTest {
         verifyNoMoreInteractions(toDoRepository);
         mvc.perform(get("/todos"))
                 .andExpect(content().json("[{\"id\":123,\"name\":\"Buy milk\",\"completed\":true},{\"id\":456,\"name\":\"Wash dishes\",\"completed\":false},{\"id\":789,\"name\":\"Go shopping\",\"completed\":true}]"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -59,7 +59,7 @@ public class ToDoControllerIntegrationTest {
         verifyNoMoreInteractions(toDoRepository);
         mvc.perform(get("/todos/123"))
                 .andExpect(content().json("{\"id\":123,\"name\":\"Buy milk\",\"completed\":true}"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -78,7 +78,7 @@ public class ToDoControllerIntegrationTest {
         ToDoItem toDoItemAfterSave = createToDoItem(1L, "Buy milk", true);
         given(toDoRepository.save(toDoItemBeforeSave)).willReturn(toDoItemAfterSave);
         verifyNoMoreInteractions(toDoRepository);
-        mvc.perform(post("/todos").content("{\"name\":\"Buy milk\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(post("/todos").content("{\"name\":\"Buy milk\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
@@ -89,7 +89,7 @@ public class ToDoControllerIntegrationTest {
         given(toDoRepository.findById(123L)).willReturn(toDoItem);
         given(toDoRepository.save(toDoItem.get())).willReturn(toDoItem.get());
         verifyNoMoreInteractions(toDoRepository);
-        mvc.perform(put("/todos/123").content("{\"name\":\"Read book\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(put("/todos/123").content("{\"name\":\"Read book\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
@@ -98,7 +98,7 @@ public class ToDoControllerIntegrationTest {
     void updateNonExistingItem() throws Exception {
         given(toDoRepository.findById(123L)).willReturn(Optional.empty());
         verifyNoMoreInteractions(toDoRepository);
-        mvc.perform(put("/todos/123").content("{\"name\":\"Read book\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(put("/todos/123").content("{\"name\":\"Read book\",\"completed\":true}").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
